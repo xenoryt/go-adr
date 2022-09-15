@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
+	"os"
 	"path"
 	"strings"
 
@@ -12,6 +13,12 @@ import (
 )
 
 func NewCmd(ctx context.Context, opt *getoptions.GetOpt, args []string) (err error) {
+	if len(args) == 0 {
+		fmt.Fprintln(os.Stderr, "Missing title!")
+		fmt.Fprintln(os.Stderr, opt.Help())
+		return getoptions.ErrorHelpCalled
+	}
+
 	cfg, err := ReadConfig()
 	if err != nil {
 		return
