@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/DavidGamba/go-getoptions"
+	"github.com/xenoryt/go-adr/commands"
 )
 
 func main() {
@@ -15,9 +16,9 @@ func main() {
 func program(args []string) int {
 	opt := getoptions.New()
 
-	opt.NewCommand("init", "Initializes ADR directory").SetCommandFn(InitCommand).
+	opt.NewCommand("init", "Initializes ADR directory").SetCommandFn(commands.InitCmd).
 		String("dir", "docs/adr")
-	opt.NewCommand("new", "Create new ADR file.").SetCommandFn(NewCommand)
+	opt.NewCommand("new", "Create new ADR file.").SetCommandFn(commands.NewCmd)
 	opt.NewCommand("update", "Updates ADR files.")
 	opt.NewCommand("list", "Lists ADRs and their status.")
 	opt.NewCommand("search", "Search for ADR.")

@@ -1,4 +1,4 @@
-package main
+package commands
 
 import (
 	"encoding/json"
@@ -12,7 +12,19 @@ import (
 const configFileName = ".go-adr.json"
 
 type Config struct {
+	// The directory of ADR files
 	Dir string `json:"dir"`
+
+	// The directory of the config file. This is used to calculate relative paths stored in this config file.
+	cfgDir string `json:"-"`
+}
+
+// AbsDir returns the absolute path to cfg.Dir
+func (cfg Config) AbsDir() string {
+	if path.IsAbs(cfg.Dir) {
+		return cfg.Dir
+	}
+	return path.Join(cfg.cfgDir, cfg.Dir)
 }
 
 // ConfigFilePath returns rooted path to the config file.
@@ -42,6 +54,10 @@ func ReadConfig() (cfg *Config, err error) {
 	}
 
 	err = json.Unmarshal(contents, &cfg)
+	if err != nil {
+		return
+	}
+	cfg.cfgDir = path.Dir(filepath)
 	return
 }
 
