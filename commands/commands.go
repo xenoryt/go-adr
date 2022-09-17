@@ -32,7 +32,7 @@ func NewCmd(ctx context.Context, opt *getoptions.GetOpt, args []string) (err err
 	title := strings.Join(args, " ")
 	filename := fmt.Sprintf("%04d-%s.md", index+1, normalizeText(title))
 	filepath := path.Join(cfg.AbsDir(), filename)
-	err = newADRFile(title, filepath)
+	err = newADRFile(title, cfg.AbsDir(), index+1)
 	if err != nil {
 		return
 	}
@@ -50,5 +50,31 @@ func InitCmd(ctx context.Context, opt *getoptions.GetOpt, args []string) (err er
 		return
 	}
 	fmt.Printf("Initialized ADR dir to %s.\n", dir)
+	return
+}
+
+func ListCmd(ctx context.Context, opt *getoptions.GetOpt, args []string) (err error) {
+	cfg, err := ReadConfig()
+	if err != nil {
+		return err
+	}
+	dir := cfg.AbsDir()
+	files, err := os.ReadDir(dir)
+	if err != nil {
+		return
+	}
+
+	results := make([]*ADRInfo, len(files))
+	for _, entry := range files {
+		if isADRFile(entry.Name()) {
+			filepath := path.Join(dir, entry.Name())
+			info, err := ReadInfo(filepath)
+			if err != nil {
+				return fmt.Errorf("Failed to parse %s: %w", filepath, err)
+			}
+			results = append(results, info)
+			fmt.Printf("%s: %s\n", info.Title, info.Status[len(info.Status)-1].Status)
+		}
+	}
 	return
 }

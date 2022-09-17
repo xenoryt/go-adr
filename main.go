@@ -21,7 +21,7 @@ func program(args []string) int {
 	opt.NewCommand("new", "Create new ADR file.").SetCommandFn(commands.NewCmd).
 		HelpSynopsisArgs("<title>")
 	opt.NewCommand("update", "Updates ADR files.")
-	opt.NewCommand("list", "Lists ADRs and their status.")
+	opt.NewCommand("list", "Lists ADRs and their status.").SetCommandFn(commands.ListCmd)
 	opt.NewCommand("search", "Search for ADR.")
 
 	opt.HelpCommand("help", opt.Alias("h"))
