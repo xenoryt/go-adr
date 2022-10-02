@@ -15,15 +15,7 @@ func main() {
 
 func program(args []string) int {
 	opt := getoptions.New()
-
-	opt.NewCommand("init", "Initializes ADR directory").SetCommandFn(commands.InitCmd).
-		String("dir", "docs/adr")
-	opt.NewCommand("new", "Create new ADR file.").SetCommandFn(commands.NewCmd).
-		HelpSynopsisArgs("<title>")
-	opt.NewCommand("update", "Updates ADR files.")
-	opt.NewCommand("list", "Lists ADRs and their status.").SetCommandFn(commands.ListCmd)
-	opt.NewCommand("search", "Search for ADR.")
-
+	commands.InitOpts(opt)
 	opt.HelpCommand("help", opt.Alias("h"))
 
 	remaining, err := opt.Parse(args[1:])

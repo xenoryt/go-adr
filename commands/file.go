@@ -239,3 +239,21 @@ func ReadInfo(filepath string) (info *ADRInfo, err error) {
 
 	return info, err
 }
+
+func ADRFiles(cfg *Config) ([]string, error) {
+	dir := cfg.AbsDir()
+	files, err := os.ReadDir(dir)
+	if err != nil {
+		return nil, err
+	}
+
+	results := []string{}
+	for _, entry := range files {
+		if isADRFile(entry.Name()) {
+			filepath := path.Join(dir, entry.Name())
+			results = append(results, filepath)
+		}
+	}
+
+	return results, nil
+}
